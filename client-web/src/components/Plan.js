@@ -2,7 +2,7 @@ import React from 'react';
 
 const Plan = () => (
     <div>
-      <h1>Schedule</h1>
+      <h1>Plan</h1>
     </div>
 );
 
