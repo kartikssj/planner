@@ -1,4 +1,4 @@
-import mysql from 'server/src/middlewares/mysql';
+import mysql from 'mysql';
 
 export default function(config) {
   if (!mysql) throw new Error('Missing mysql module param!');

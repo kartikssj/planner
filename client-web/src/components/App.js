@@ -1,21 +1,24 @@
 import React from 'react';
 import {BrowserRouter as Router, Route} from 'react-router-dom';
-import Header from './Header';
+import Header from './common/Header';
 import Settings from './Settings';
 import Tasks from './Tasks';
 import Plan from './Plan';
+import Login from './Login';
+import AddTask from './AddTask';
 
-export default class App extends React.Component {
-  render() {
-    return (
-      <Router>
-        <div className="container">
-          <Route path="/" component={Header} />
-          <Route exact path="/" component={Plan}/>
-          <Route path="/settings" component={Settings}/>
-          <Route path="/tasks" component={Tasks}/>
-        </div>
-      </Router>
-    );
-  }
-};
+
+const App = () => (
+  <Router>
+    <div className="container">
+      <Route path="/" component={Header} />
+      <Route path="/plan" component={Plan} />
+      <Route path="/settings" component={Settings} />
+      <Route exact path="/tasks" component={Tasks} />
+      <Route path="/tasks/add" component={AddTask} />
+      <Route path="/login" component={Login} />
+    </div>
+  </Router>
+);
+
+export default App;

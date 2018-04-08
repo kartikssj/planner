@@ -1,30 +1,59 @@
+/* global bootbox */
+import {connect} from 'react-redux';
 import React from 'react';
+import bootbox from 'bootbox';
+import {getTasksAction, deleteTaskAction} from '../actions/index';
 
-const Tasks = () => (
-  <form>
-    <h2>Add Task</h2>
-    <div className="form-group">
-      <label>Title</label>
-      <input type="email" className="form-control" placeholder="Title" />
-    </div>
-    <div className="form-group">
-      <label>Time Required (Minutes)</label>
-      <input type="number" className="form-control" placeholder="30" />
-    </div>
-    <div className="form-group">
-      <label>Deadline</label>
-      <input type="date" className="form-control" placeholder="2018/04/01" />
-    </div>
-    <div className="form-group">
-      <label>Positivity (1-5)</label>
-      <input type="number" className="form-control" placeholder="4" />
-    </div>
-    <div className="form-group">
-      <label>Negativity (1-5)</label>
-      <input type="number" className="form-control" placeholder="3" />
-    </div>
-    <button type="submit" className="btn btn-default">Add</button>
-  </form>
-);
+function mapStateToProps(state) {
+  return {
+    tasks: state.tasks.list,
+  }
+}
 
-export default Tasks;
+function mapDispatchToProps(dispatch) {
+  return {
+    getTasks: () => dispatch(getTasksAction()),
+    deleteTask: id => dispatch(deleteTaskAction(id))
+  }
+}
+
+class Tasks extends React.Component {
+  componentDidMount() {
+    this.props.getTasks();
+  }
+  addTask() {
+    this.props.history.push("/tasks/add");
+  }
+  deleteTask(id) {
+    bootbox.confirm("Are you sure you want to delete the task?", c => {
+      if (c) this.props.deleteTask(id);
+    })
+  }
+  render() {
+    const {tasks} = this.props;
+    return (
+      <div className="container">
+        <h2>Tasks</h2>
+        <table className="table">
+          <tbody>
+            {tasks.map(task => (
+              <tr key={task.id}>
+                <td style={{width: '100%'}}>{task.title}</td>
+                <td>
+                  <button className="btn btn-warning btn-xs" aria-label="Delete" onClick={this.deleteTask.bind(this, task.id)}>
+                    <span className="glyphicon glyphicon-trash" aria-hidden="true"></span> Delete
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+        <button className="btn btn-sm btn-primary" aria-label="Add" onClick={this.addTask.bind(this)}>
+          <span className="glyphicon glyphicon-plus"></span> Add Task
+        </button>
+      </div>
+    );
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Tasks);
