@@ -6,14 +6,14 @@ export default function(config) {
 
   return function (req, res, next) {
     req.getConnection = function (callback) {
-      pool.getConnection(function (err, connection) {
+      pool.getConnection(function (err, con) {
         if (err) return res.status(500).json({'error': 'Something went wrong!'});
-        callback(connection);
+        callback(con, err);
         res.on('close', function() {
-          connection.release();
+          con.release();
         });
         res.on('finish', function() {
-          connection.release();
+          con.release();
         });
       });
     };

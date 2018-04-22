@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import {Redirect} from 'react-router-dom';
 import {connect} from 'react-redux';
 import {loginAction} from '../actions/index';
 import Alert from './common/Alert';
@@ -39,10 +38,9 @@ class Login extends Component {
     this.props.doLogin(this.state);
   }
   render() {
-    const {error, loggedIn, isLoading} = this.props.status;
+    const {error, isLoading} = this.props.status;
     return (
       <div className="container">
-        {loggedIn && <Redirect to="/" />}
         <Loader isLoading={isLoading} />
         <Alert type="danger" text={error} />
         <form className="form-signin" onSubmit={this.handleSubmit}>

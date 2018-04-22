@@ -1290,6 +1290,10 @@ kind-of@^4.0.0:
   dependencies:
     is-buffer "^1.1.5"
 
+knapsack-js@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/knapsack-js/-/knapsack-js-1.0.2.tgz#df35f4056e8fed7ac416c877015ebb1b4074ebf8"
+
 lodash@^4.17.4:
   version "4.17.5"
   resolved "https://unpm.uberinternal.com/lodash/-/lodash-4.17.5.tgz#99a92d65c0272debe8c96b6057bc8fbfa3bed511"

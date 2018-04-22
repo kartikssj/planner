@@ -5,7 +5,7 @@ const router = express.Router();
 
 router.get('/', function(req, res) {
   req.getConnection(con => {
-    con.query('SELECT * FROM tasks WHERE userid=?', [req.session.userid], (err, results) => {
+    con.query('SELECT * FROM tasks WHERE userid=? AND deleted is null', [req.session.userid], (err, results) => {
       if (err) {
         return res.json({error: err});
       }
@@ -48,13 +48,37 @@ router.post('/', function(req, res) {
 });
 
 router.get('/:uuid', function(req, res) {
-  getTask(req.params.uuid, req, res, task => {
+  getTask(req.params.uuid, req, res, (task, err) => {
+    if (err) {
+      return res.status(err.status).json(err);
+    }
     return res.json(task);
   });
 });
 
+router.post('/:uuid/done', function(req, res) {
+  getTask(req.params.uuid, req, res, (task, err) => {
+    if (err) {
+      return res.status(err.status).json(err);
+    }
+    req.getConnection(con => {
+      con.query('UPDATE TASKS SET last_done=NOW() WHERE id=? AND userid=?', [req.params.uuid, req.session.userid], err => {
+        if (err) {
+          return res.status(500).json({error: err});
+        }
+        getTask(req.params.uuid, req, res, task => {
+          return res.json(task);
+        })
+      })
+    });
+  })
+});
+
 router.delete('/:uuid', function(req, res) {
-  getTask(req.params.uuid, req, res, task => {
+  getTask(req.params.uuid, req, res, (task, err) => {
+    if (err) {
+      return res.status(err.status).json(err);
+    }
     req.getConnection(con => {
       con.query('DELETE FROM tasks WHERE id=? AND userid=?', [req.params.uuid, req.session.userid], err => {
         if (err) {
@@ -70,10 +94,10 @@ function getTask(id, req, res, cb) {
   req.getConnection(con => {
     con.query('SELECT * FROM tasks WHERE id=? AND userid=?', [id, req.session.userid], (err, results) => {
       if (err) {
-        return res.status(500).json({error: err});
+        return cb(null, {error: err.message, status: 500});
       }
       if (results.length === 0) {
-        return res.status(404).json({error: 'Task not found!'});
+        return cb(null, {error: 'Task not found!', status: 404});
       }
       return cb(results[0]);
     })

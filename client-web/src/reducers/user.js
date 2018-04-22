@@ -21,12 +21,11 @@ export default (state = initialState, action) => {
         error: null,
         data: action.response,
       };
-    case 'UNAUTHORIZED':
     case 'GET_USER_ERROR':
       return {
         ...state,
         isLoading: false,
-        error: action.response,
+        error: action.error,
         data: null,
       };
     case 'UPDATE_USER_START':

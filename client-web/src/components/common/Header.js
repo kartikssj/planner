@@ -35,7 +35,7 @@ class Header extends React.Component {
       }
     } else if (status.loggedIn === true) {
       if (location.pathname === '/login') {
-        history.push('/');
+        history.push('/plan');
       }
     }
     if (this.props.status.loggedIn !== next.status.loggedIn) {
@@ -49,12 +49,13 @@ class Header extends React.Component {
         <nav className="navbar navbar-default navbar-fixed-top">
           <div className="container-fluid">
             <div className="navbar-header">
-              <button type="button" className="navbar-toggle collapsed" data-toggle="collapse" data-target="#sections" aria-expanded="false">
-                <span className="sr-only">Toggle navigation</span>
-                <span className="icon-bar">&nbsp;</span>
-                <span className="icon-bar">&nbsp;</span>
-                <span className="icon-bar">&nbsp;</span>
-              </button>
+              {status.loggedIn &&
+                <button type="button" className="navbar-toggle collapsed" data-toggle="collapse" data-target="#sections" aria-expanded="false">
+                  <span className="sr-only">Toggle navigation</span>
+                  <span className="icon-bar">&nbsp;</span>
+                  <span className="icon-bar">&nbsp;</span>
+                  <span className="icon-bar">&nbsp;</span>
+                </button>}
               <Link className="navbar-brand" to="/plan">Planner</Link>
             </div>
             <div className="collapse navbar-collapse" id="sections">
@@ -63,19 +64,18 @@ class Header extends React.Component {
               <ul className="nav navbar-nav navbar-right">
                 {status.loggedIn &&
                   <li><a href="/login" onClick={logout}>Logout</a></li>}
-                {!status.loggedIn &&
-                  <li><Link to="/login">Login</Link></li>}
               </ul>
             </div>
           </div>
         </nav>
-        <ul className="nav nav-pills">
-          {SECTIONS.map(section => (
-            <li className={pathname.startsWith(section.url) ? 'active' : ''} key={section.url}>
-              <Link to={section.url}>{section.title}</Link>
-            </li>
-          ))}
-        </ul>
+        {status.loggedIn &&
+          <ul className="nav nav-pills">
+            {SECTIONS.map(section => (
+              <li className={pathname.startsWith(section.url) ? 'active' : ''} key={section.url}>
+                <Link to={section.url}>{section.title}</Link>
+              </li>
+            ))}
+          </ul>}
       </div>
     );
   }

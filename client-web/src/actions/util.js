@@ -22,23 +22,21 @@ export function fetchAction(type, url, request = {}) {
           })
         } else if (!resp.ok) {
           if (resp.status === 401) {
-            dispatch({
-              type: 'UNAUTHORIZED'
-            })
-          } else {
-            resp.json().then(parsed => {
-              dispatch({
-                type: type + '_ERROR',
-                status: resp.status,
-                error: parsed.error,
-              })
-            }).catch(_ => {
-              dispatch({
-                type: type + '_ERROR',
-                status: resp.status,
-              })
-            });
+            dispatch({ type: 'UNAUTHORIZED' })
           }
+          resp.json().then(parsed => {
+            dispatch({
+              type: type + '_ERROR',
+              status: resp.status,
+              error: parsed.error,
+            })
+          }).catch(_ => {
+            dispatch({
+              type: type + '_ERROR',
+              status: resp.status,
+              error: 'Invalid JSON!',
+            })
+          });
         } else {
           if (resp.status === 204) {
             dispatch({

@@ -17,14 +17,13 @@ export default (state = initialState, action) => {
         error: null,
         addSuccess: null,
       };
-    case 'UNAUTHORIZED':
     case 'GET_TASKS_ERROR':
     case 'ADD_TASK_ERROR':
     case 'DELETE_TASK_ERROR':
       return {
         ...state,
         isLoading: false,
-        error: action.response
+        error: action.error,
       };
     case 'GET_TASKS_SUCCESS':
       return {
