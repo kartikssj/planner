@@ -3,9 +3,9 @@
   "version": "1.0.0",
   "description": "Planner for Busy People",
   "scripts": {
-    "install": "cd server && yarn install && cd ../client-web && yarn install",
-    "build": "cd server && yarn run build && cd ../client-web && yarn run build",
-    "start": "concurrently -k \"cd server && yarn run start\" \"cd client-web && yarn run start\""
+    "install": "cd server && npm install && cd ../client-web && npm install",
+    "build": "cd server && npm run build && cd ../client-web && npm run build",
+    "start": "concurrently -k \"cd server && npm run start\" \"cd client-web && npm run start\""
   },
   "dependencies": {}
 }
