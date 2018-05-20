@@ -3,6 +3,7 @@ import {fetchAction} from './util';
 
 // tasks
 export const getTasksAction = () => fetchAction('GET_TASKS', '/api/v1/tasks');
+export const getTaskAction = (id) => fetchAction('GET_TASK', '/api/v1/tasks/'+id);
 export const addTaskAction = (data) => fetchAction('ADD_TASK', '/api/v1/tasks', {method: 'POST', body: JSON.stringify(data)});
 export const deleteTaskAction = (id) => fetchAction('DELETE_TASK', '/api/v1/tasks/'+id, {method: 'DELETE'});
 export const doneTaskAction = (id) => fetchAction('DONE_TASK', '/api/v1/tasks/'+id+'/done', {method: 'POST'});

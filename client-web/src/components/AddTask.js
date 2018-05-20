@@ -31,6 +31,7 @@ class AddTask extends React.Component {
     return (
       <div className="container">
         <h3>Add Task</h3>
+        <hr/>
         <Loader isLoading={tasks.isLoading} />
         <Alert type="danger" text={tasks.error} />
         <TaskForm onSubmit={this.props.addTask} onCancel={this.back.bind(this)} />

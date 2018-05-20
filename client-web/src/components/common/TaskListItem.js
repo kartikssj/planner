@@ -12,6 +12,9 @@ function mapDispatchToProps(dispatch) {
 }
 
 class TaskListItem extends React.Component {
+  taskDetails(id) {
+    this.props.history.push("/tasks/details/"+id);
+  }
   doneTask(id) {
     bootbox.confirm("Are you sure you want to mark the task as done?", c => {
       if (c) this.props.doneTask(id);
@@ -32,9 +35,15 @@ class TaskListItem extends React.Component {
         <div className="row">
           <div className="col-md-8 col-xs-8">
             <small className="text-muted">({task.time_minutes}m)</small>&nbsp;
-            <small><span className="text-warning">{new Date(task.deadline).toDateString()}</span></small>
+            {
+              task.deadline &&
+              <small><span className="text-warning">{new Date(task.deadline).toDateString()}</span></small>
+            }
           </div>
-          <div className="col-md-4 col-xs-4">
+          <div className="col-md-4 col-xs-4" style={{textAlign:'right'}}>
+            <button className="btn btn-success btn-xs" aria-label="Done" onClick={this.taskDetails.bind(this, task.id)} style={{'marginRight':'5px'}}>
+              <span className="glyphicon glyphicon-info-sign" aria-hidden="true"> </span>
+            </button>
             <button className="btn btn-info btn-xs" aria-label="Done" onClick={this.doneTask.bind(this, task.id)} style={{'marginRight':'5px'}}>
               <span className="glyphicon glyphicon-ok" aria-hidden="true"> </span>
             </button>

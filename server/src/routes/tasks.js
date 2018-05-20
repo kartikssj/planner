@@ -21,7 +21,7 @@ router.post('/', function(req, res) {
   }
   const id = uuid.v4();
   req.getConnection(con => {
-    con.query('INSERT INTO tasks VALUES (?,NOW(),NOW(),null,?,?,?,?,?,?,?,?,?,?,null)',
+    con.query('INSERT INTO tasks VALUES (?,NOW(),NOW(),null,?,?,?,?,?,?,?,?,?,?,?,null)',
       [
         id,
         req.session.userid,
@@ -30,8 +30,7 @@ router.post('/', function(req, res) {
         req.body.deadline,
         req.body.result_positive,
         req.body.result_negative,
-        req.body.time_window_from,
-        req.body.time_window_to,
+        req.body.filter_days,
         req.body.freq_minutes,
         req.body.starting,
       ],
@@ -111,11 +110,22 @@ function validateTask(task) {
   if (!task.time_minutes || isNaN(parseInt(task.time_minutes))) {
     return "Invalid minutes";
   }
-  if (!task.deadline) {
-    return "Invalid deadline";
+  if (!task.deadline && (!task.freq_minutes || !task.starting)) {
+    return "Either deadline or frequency and start date must be provided";
+  }
+  if (task.freq_minutes && !task.starting) {
+    return "Starting date must be provided for recurring tasks";
   }
   if (!task.result_positive || !task.result_positive) {
     return "Invalid deadline";
+  }
+  if (task.filter_days) {
+    if (task.filter_days.split(',').length !== 7) {
+      return "Filter days should have 7 days";
+    }
+    if (task.filter_days === 'false,false,false,false,false,false,false') {
+      return "Task should be schedulable on atleast one day of the week!";
+    }
   }
 }
 

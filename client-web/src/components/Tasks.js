@@ -23,7 +23,7 @@ class Tasks extends React.Component {
     this.props.history.push("/tasks/add");
   }
   render() {
-    const {tasks} = this.props;
+    const {tasks, history} = this.props;
     const done = tasks.filter(task => task.last_done && !task.freq_minutes);
     const pending = tasks.filter(task => {
       return !done || done.indexOf(task) < 0;
@@ -33,18 +33,20 @@ class Tasks extends React.Component {
         {pending.length > 0 &&
           <div>
             <h3>Pending Tasks</h3>
+            <hr/>
             <div className="list-group">
               {pending.map(task => (
-                <TaskListItem className="list-group-item" task={task} key={task.id} />
+                <TaskListItem history={history} className="list-group-item" task={task} key={task.id} />
               ))}
             </div>
           </div>}
         {done.length > 0 &&
           <div>
             <h3>Completed Tasks</h3>
+            <hr/>
             <div className="list-group">
               {done.map(task => (
-                <TaskListItem className="list-group-item" task={task} key={task.id} />
+                <TaskListItem history={history} className="list-group-item" task={task} key={task.id} />
               ))}
             </div>
           </div>}

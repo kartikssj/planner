@@ -23,11 +23,10 @@ CREATE TABLE `tasks` (
   `result_positive` FLOAT,
   `result_negative` FLOAT,
   /* filter */
-  `time_window_from` INT,
-  `time_window_to` INT,
+  `filter_days` varchar(50) NOT NULL DEFAULT 'true,true,true,true,true,true,true',
   /* recurring */
   `freq_minutes` INT,
-  `starting` timestamp NULL DEFAULT NULL,
+  `starting` timestamp NULL DEFAULT NULL,	
   `last_done` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 

@@ -9,6 +9,7 @@ const initialState = {
 export default (state = initialState, action) => {
   switch (action.type) {
     case 'GET_TASKS_START':
+    case 'GET_TASK_START':
     case 'ADD_TASK_START':
     case 'DELETE_TASK_START':
       return {
@@ -18,12 +19,22 @@ export default (state = initialState, action) => {
         addSuccess: null,
       };
     case 'GET_TASKS_ERROR':
+    case 'GET_TASK_ERROR':
     case 'ADD_TASK_ERROR':
     case 'DELETE_TASK_ERROR':
       return {
         ...state,
         isLoading: false,
         error: action.error,
+      };
+    case 'GET_TASK_SUCCESS':
+      const {list = []} = state;
+      list.filter(task => task.id === action.response.id);
+      list.push(action.response);
+      return {
+        ...state,
+        isLoading: false,
+        list,
       };
     case 'GET_TASKS_SUCCESS':
       return {

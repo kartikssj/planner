@@ -64,6 +64,7 @@ class Settings extends React.Component {
       <div className="container">
         <form onSubmit={this.handleSave}>
           <h3>Settings</h3>
+          <hr/>
           <Alert type="danger" text={error} onClose={resetUpdateUser} />
           <Alert type="success" text={updateSuccess ? "Updated successfully" : null} onClose={resetUpdateUser} />
           <Loader isLoading={isLoading} />

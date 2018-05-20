@@ -11,18 +11,23 @@ router.get('/', function(req, res) {
         return res.status(404).json({error: 'User not found!'});
       }
       const user = results[0];
-      const minutes = user.hours.split(',').map(hour => parseInt(hour) * 60);
-      con.query('SELECT * FROM tasks WHERE userid=? AND (freq_minutes != null OR last_done is NULL)', [req.session.userid], (err, tasks) => {
+      const minutes = user.hours.split(',').map(hour => parseFloat(hour) * 60);
+      con.query('SELECT * FROM tasks WHERE userid=? AND (freq_minutes > 0 OR last_done is NULL)', [req.session.userid], (err, tasks) => {
         if (err) {
           return res.json({error: err});
         }
         const days = [];
         for (let i = 0; i < 7; i++) {
           const date = getDate(i);
-          const planned = planTasks([...tasks], minutes[date.getDay()], []);
+          // only tasks not done on the same day allowed on that day
+          const plannable = tasks.filter(filterNotSameDay(date));
+          const totalMinutes= minutes[date.getDay()];
+          const planned = planTasks(plannable, totalMinutes, []);
+          const plannedMinutes = planned.reduce((total, task) => total + task.time_minutes, 0);
           days.push({
             date,
             tasks: planned,
+            unused: totalMinutes - plannedMinutes
           });
           tasks = tasks.filter(task => planned.indexOf(task) < 0);
         }
@@ -31,6 +36,21 @@ router.get('/', function(req, res) {
     });
   });
 });
+
+function filterNotSameDay(date) {
+  return function(task) {
+    if (task.freq_minutes && task.freq_minutes > 0) {
+        const lastDone = new Date(task.last_done);
+        const starting = new Date(task.starting);
+        return starting.getTime() <= date.getTime() && date.toDateString() !== lastDone.toDateString();
+    }
+    if (task.filter_days) {
+      const filterDays = task.filter_days.split(',');
+      return filterDays[date.getDay()] === 'true';
+    }
+    return true;
+  }
+}
 
 
 const timeFactor = 30;
@@ -55,7 +75,7 @@ function getMinutesToDeadline(task) {
   if (task.freq_minutes > 0) {
     const lastdone = new Date(task.last_done ? task.last_done : task.starting).getTime() / 60000;
     const nextDeadline = lastdone + task.freq_minutes;
-    task.deadline = nextDeadline;
+    task.deadline = new Date(nextDeadline * 60 * 1000);
     return nextDeadline - now;
   } else {
     const deadline = new Date(task.deadline).getTime() / 60000;
