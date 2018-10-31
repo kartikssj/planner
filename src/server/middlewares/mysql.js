@@ -7,7 +7,10 @@ export default function(config) {
   return function (req, res, next) {
     req.getConnection = function (callback) {
       pool.getConnection(function (err, con) {
-        if (err) return res.status(500).json({'error': 'Something went wrong!'});
+        if (err) {
+          console.log("MySQL Error!", err);
+          return res.status(500).json({'error': 'Something went wrong!'});
+        }
         callback(con, err);
         res.on('close', function() {
           con.release();

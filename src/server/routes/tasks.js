@@ -21,7 +21,7 @@ router.post('/', function(req, res) {
   }
   const id = uuid.v4();
   req.getConnection(con => {
-    con.query('INSERT INTO tasks VALUES (?,NOW(),NOW(),null,?,?,?,?,?,?,?,?,?,?,?,null)',
+    con.query('INSERT INTO tasks VALUES (?,NOW(),NOW(),null,?,?,?,?,?,?,?,?,?,null)',
       [
         id,
         req.session.userid,
@@ -61,7 +61,7 @@ router.post('/:uuid/done', function(req, res) {
       return res.status(err.status).json(err);
     }
     req.getConnection(con => {
-      con.query('UPDATE TASKS SET last_done=NOW() WHERE id=? AND userid=?', [req.params.uuid, req.session.userid], err => {
+      con.query('UPDATE tasks SET last_done=NOW() WHERE id=? AND userid=?', [req.params.uuid, req.session.userid], err => {
         if (err) {
           return res.status(500).json({error: err});
         }

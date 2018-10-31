@@ -12,6 +12,7 @@ router.post('/', function(req, res) {
       if (err) {
         return res.json({error: err});
       }
+      console.log("RES", results);
       if (results.length === 0) {
         req.session.regenerate(err => {
           err && res.clearCookie('psid');
