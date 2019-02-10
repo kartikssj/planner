@@ -5,7 +5,6 @@ export default (req, res, next) => {
     '/v1/logout',
     '/v1/status',
   ];
-  console.log("PATH", req.path);
   if (whitelist.indexOf(req.path) === -1) {
     if (!req.session.userid) {
       return res.status(401).json({error: 'Unauthorized!'});

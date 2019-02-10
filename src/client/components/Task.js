@@ -23,7 +23,7 @@ class Task extends React.Component {
     this.props.getTask(id);
   }
   back() {
-    this.props.history.push('/tasks');
+    this.props.history.goBack();
   }
   render() {
     const {tasks, match: {params: {id}}} = this.props;
@@ -42,25 +42,51 @@ class Task extends React.Component {
       <div className="container">
         <div>
           <h3>{task.title}</h3>
-          <hr/>
-          <ul>
-            <li>Created {task.created}</li>
-            <li>Updated {task.updated}</li>
-            {task.deleted &&
-              <li>Deleted {task.deleted}</li>}
-            <li>{task.time_minutes} Minutes</li>
-            <li>Happyness Index {task.result_positive}</li>
-            <li>Sadness Index {task.result_negative}</li>
-            {task.deadline &&
-              <li>Complete by {task.deadline}</li>}
-            <li>Can be done on {days.map(day => {
-              if (filterDays[days.indexOf(day)] === 'true') {
-                return day + " ";
-              }
-            })}</li>
-            {task.freq_minutes &&
-              <li>Every {task.freq_minutes/60/24} days starting {task.starting}</li>}
-          </ul>
+          <table className="table">
+            <tbody>
+            <tr>
+              <td>Created</td><td>{new Date(task.created).toDateString()}</td>
+            </tr>
+            <tr>
+              <td>Updated</td><td>{new Date(task.updated).toDateString()}</td>
+            </tr>
+            {task.deleted && (
+              <tr>
+                <td>Deleted</td><td>{task.deleted}</td>
+              </tr>
+            )}
+            <tr>
+              <td>Time Required</td><td>{task.time_minutes}m</td>
+            </tr>
+            <tr>
+              <td>Happyness Index</td><td>{task.result_positive}</td>
+            </tr>
+            <tr>
+              <td>Sadness Index</td><td>{task.result_negative}</td>
+            </tr>
+            {task.deadline && (
+              <tr>
+                <td>Deadline</td><td>{new Date(task.deadline).toDateString()}</td>
+              </tr>
+            )}
+            <tr>
+              <td>Days</td>
+              <td>
+                {days.map(day => {
+                  if (filterDays[days.indexOf(day)] === 'true') {
+                    return day + " ";
+                  }
+                })}
+              </td>
+            </tr>
+            {task.freq_minutes && (
+              <tr>
+                <td>Repeat Every</td>
+                <td>{task.freq_minutes/60/24} days starting {task.starting}</td>
+              </tr>
+            )}
+            </tbody>
+          </table>
           <button className="btn btn-sm btn-primary" aria-label="Back" onClick={this.back.bind(this)}>
             <span className="glyphicon glyphicon-backward"> </span> Back
           </button>

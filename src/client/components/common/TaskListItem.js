@@ -34,7 +34,7 @@ class TaskListItem extends React.Component {
         </div>
         <div className="row">
           <div className="col-md-8 col-xs-8">
-            <small className="text-muted">({task.time_minutes}m)</small>&nbsp;
+            <small className="text-muted">({task.time_minutes}m/{Number.parseFloat(task.score).toFixed(2)})</small>&nbsp;
             {
               task.deadline &&
               <small><span className="text-warning">{new Date(task.deadline).toDateString()}</span></small>

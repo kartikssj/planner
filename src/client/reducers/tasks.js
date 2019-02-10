@@ -34,7 +34,7 @@ export default (state = initialState, action) => {
       return {
         ...state,
         isLoading: false,
-        list,
+        list: [...list],
       };
     case 'GET_TASKS_SUCCESS':
       return {

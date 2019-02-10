@@ -106,6 +106,7 @@ function planTasks(tasks, minutes, selected) {
   }
   const next = tasks.pop();
   const canSelect = next.time_minutes <= minutes;
+  tasks.sort((a,b) => getScore(a)- getScore(b));
   if (canSelect) {
     const ifSelected = planTasks(tasks, minutes - next.time_minutes, [...selected, next]);
     const ifNotSelected = planTasks(tasks, minutes, selected);
